@@ -5,7 +5,7 @@ export interface SecurityUser {
   status: "active" | "not-active"
   name: string
   email: string
-  role: "admin" | "user"
+  role: "administrator" | "user" | "admin" // "admin" is mapped to "administrator"
   notes?: string
   module?: string
 }

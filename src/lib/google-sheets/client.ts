@@ -1,3 +1,4 @@
+import "server-only"
 import { google } from "googleapis"
 
 // Initialize Google Sheets API client
@@ -18,8 +19,19 @@ export function getGoogleSheetsClient() {
 // Get spreadsheet ID from environment variables
 export function getSpreadsheetId(type: "security" | "master-data"): string {
   if (type === "security") {
-    return process.env.SECURITY_SPREADSHEET_ID || ""
+    if (process.env.SECURITY_SPREADSHEET_ID && process.env.SECURITY_SPREADSHEET_ID.length > 0) {
+      return process.env.SECURITY_SPREADSHEET_ID
+    }
+    const url = process.env.SECURITY_SPREADSHEET_URL || ""
+    const match = url.match(/\/spreadsheets\/d\/([^/]+)/)
+    return match ? match[1] : ""
   }
-  return process.env.MASTER_DATA_SPREADSHEET_ID || ""
+
+  if (process.env.MASTER_DATA_SPREADSHEET_ID && process.env.MASTER_DATA_SPREADSHEET_ID.length > 0) {
+    return process.env.MASTER_DATA_SPREADSHEET_ID
+  }
+  const url = process.env.MASTER_DATA_SPREADSHEET_URL || ""
+  const match = url.match(/\/spreadsheets\/d\/([^/]+)/)
+  return match ? match[1] : ""
 }
 
